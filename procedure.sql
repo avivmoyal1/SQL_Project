@@ -27,8 +27,8 @@ BEGIN
 		ON 
 			p.product_id = s.product_id
 		WHERE s.order_date >= curdate() - INTERVAL in_days DAY
-		GROUP BY P.PRODUCT_id
-		ORDER BY count(p.product_id) LIMIT in_amount;
+		GROUP BY p.product_id
+		ORDER BY count(p.product_id) DESC LIMIT in_amount;
 
 END; $$
 

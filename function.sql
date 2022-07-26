@@ -1,5 +1,5 @@
+SET GLOBAL log_bin_trust_function_creators = 1;
 DELIMITER $$ 
-
 CREATE FUNCTION 
 	employee_income(in_name VARCHAR(100), in_month INT, in_year INT) RETURNS INTEGER
 BEGIN
