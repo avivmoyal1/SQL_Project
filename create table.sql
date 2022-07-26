@@ -109,7 +109,7 @@ create table inventory_changes(
 );
 
 create table delivery(
-	delivery_id INT,
+	delivery_id INT NOT NULL AUTO_INCREMENT,
     member_id INT,
     order_date DATE,
     delivery_price INT,
@@ -118,12 +118,13 @@ create table delivery(
 );
 
 create table store_order(
-	order_id INT,
+	order_id INT NOT NULL AUTO_INCREMENT,
     customer_id INT,
     member_id INT,
     delivery INT,
     product_id INT,
     price INT,
+    order_date DATE,
     primary key(order_id),
     foreign key(customer_id) references customer(customer_id),
 	foreign key(delivery) references delivery(delivery_id),
