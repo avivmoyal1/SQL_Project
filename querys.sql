@@ -6,11 +6,11 @@ use pet_store;
 SELECT product_name, amount from product;
 
 -- 2  function ??------------------------------------------------------------------------------------
-SELECT * FROM store_order s
-	WHERE s.order_date >= curdate() - INTERVAL 100 week; 
+SELECT * FROM store_order 
+	WHERE order_date >= curdate() - INTERVAL 100 WEEK; 
 
 -- 3 -----------------------------------------------------------------------------------------------
-SELECT count(*) as amount ,crew.member_id ,p_name FROM person 
+SELECT crew.member_id ,p_name, count(*) as amount, SUM(store_order.price) as total_price FROM person 
 	INNER JOIN  crew 
     ON
 		crew.person_id = person.person_id 
@@ -32,7 +32,7 @@ SELECT c.member_id ,p.p_name, sum(s.price) as total FROM person p
     ORDER BY total DESC LIMIT 1;
     
 -- 5  -----------------------------------------------------------------------------------------------
-SELECT  c.customer_id, p.p_name, s.order_id, s.product_id,s.price, s.order_id FROM person p	
+SELECT  c.customer_id, p.p_name, s.order_id, s.product_id,s.price FROM person p	
 	INNER JOIN customer c 
     ON
 		p.person_id = c.person_id
@@ -52,7 +52,7 @@ SELECT  c.customer_id, p.p_name FROM person p
 	WHERE s.customer_id IS NULL;
 	
 -- 7 -----------------------------------------------------------------------------------------------
-SELECT *, count(*) AS delivery_amount FROM person p 
+SELECT c.customer_id, p.p_name, count(*) AS delivery_amount FROM person p 
 	INNER JOIN customer c
     ON 	
 		p.person_id = c.person_id

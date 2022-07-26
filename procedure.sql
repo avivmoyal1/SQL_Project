@@ -3,13 +3,22 @@ DELIMITER $$
 
 CREATE PROCEDURE set_delivery(in_order_id INT, in_member_id INT)
 BEGIN
+	DECLARE fee INT;
+    SELECT price INTO fee FROM store_order where order_id = in_order_id; 
+    
+    IF fee > 180 THEN 
+		SET fee = 0;
+    ELSE
+		SET fee = 30;
+        
 	INSERT INTO delivery (member_id,order_date,delivery_price)
 	VALUES
-		(in_member_id,curdate(),30);
+		(in_member_id,curdate(),fee);
 	
     UPDATE store_order
     SET
-		delivery = (SELECT delivery_id FROM delivery ORDER BY delivery_id DESC LIMIT 1)
+		delivery = (SELECT delivery_id FROM delivery ORDER BY delivery_id DESC LIMIT 1), 
+        price = price + fee
 	where order_id = in_order_id;
 
 END; $$
