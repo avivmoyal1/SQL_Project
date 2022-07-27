@@ -69,7 +69,6 @@
                     echo '</form>';
                 }
             ?>
-   
               <?php
 
                     $op = 0;
@@ -85,7 +84,7 @@
                             $query = "SELECT product_name, amount from product";
                             $result = mysqli_query($connection,$query); 
                             if(mysqli_num_rows($result) != 0){
-                                echo "<table class='table table-hover'>";
+                                echo "<table class='table table-hover '>";
                                 echo "<thead><tr><th scope='col'>#</th><th scope='col'> product name </th><th scope='col'> amount</th></tr></thead><tbody>";
                             }
                             while($row = mysqli_fetch_array($result)){
