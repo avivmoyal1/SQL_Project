@@ -10,7 +10,7 @@ BEGIN
 		SET fee = 0;
     ELSE
 		SET fee = 30;
-        
+	END IF;
 	INSERT INTO delivery (member_id,order_date,delivery_price)
 	VALUES
 		(in_member_id,curdate(),fee);

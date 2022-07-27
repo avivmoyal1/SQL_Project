@@ -57,9 +57,12 @@ insert into delivery (delivery_id,member_id,order_date,delivery_price)
 values
 	(500,2002,"2022-02-06",50),(501,2002,"2022-01-04",40),(502,2002,"2021-11-20",10),(503,2002,"2022-02-20",50),(504,2002,"2022-02-21",50);
     
-insert into store_order (order_id,customer_id,member_id,delivery,product_id,price,order_date)
+insert into store_order (order_id,customer_id,member_id,delivery,order_date)
 values
-	(6000,10000,80,500,150,200,"2022-02-06"),(6001,10001,81,501,151,200,"2022-07-06"),(6002,10002,82,502,152,100,"2022-07-24"),(6003,10004,80,503,150,200,"2022-07-25"),(6004,10004,80,504,150,200,"2022-07-25");
-insert into store_order (order_id,customer_id,member_id,product_id,price,order_date)
+	(6000,10000,80,500,"2022-02-06"),(6001,10001,81,501,"2022-07-06"),(6002,10002,82,502,"2022-07-24"),(6003,10004,80,503,"2022-07-25"),(6004,10004,80,504,"2022-07-25");
+
+insert into store_order (order_id,customer_id,member_id,order_date)
 values   
-    (6005,10000,80,150,200,"2022-07-25")
+    (6005,10000,80,"2022-07-25");
+    
+ 

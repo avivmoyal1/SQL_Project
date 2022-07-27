@@ -1,76 +1,76 @@
 -- drop database pet_store;
 
-create database pet_store;
+CREATE DATABASE pet_store;
 
-use pet_store;
+USE pet_store;
 
-create table store_role(
+CREATE TABLE store_role(
 	role_id int,
     role_name VARCHAR(100),
-    primary key(role_id)
+	PRIMARY KEY(role_id)
 );
 
-create table street(
+CREATE TABLE street(
 	street_id INT,
     street_name VARCHAR(100),
-    primary key(street_id)
+    PRIMARY KEY(street_id)
 );
 
-create table city(
+CREATE TABLE city(
 	city_id INT,
     city_name VARCHAR(100),
-    primary key(city_id)
+    PRIMARY KEY(city_id)
 );
 
-create table address(
+CREATE TABLE address(
 	address_id INT,
     city_id INT,
     street_id INT,
     street_num INT,
-    primary key(address_id),
-    foreign key(city_id) references city(city_id),
-    foreign key(street_id) references street(street_id)
+    PRIMARY KEY(address_id),
+    FOREIGN KEY(city_id) REFERENCES city(city_id),
+    FOREIGN KEY(street_id) REFERENCES street(street_id)
 );
 
-create table person(
+CREATE TABLE person(
 	person_id INT,
     p_name VARCHAR(100),
     p_address INT,
     p_phone int,
-    primary key(person_id),
-    foreign key(p_address) references address(address_id)
+    PRIMARY KEY(person_id),
+    FOREIGN KEY(p_address) REFERENCES address(address_id)
 );
 
-create table family_kind(
+CREATE TABLE family_kind(
 	family_id INT,
     family_name VARCHAR(100),
-    primary key(family_id)
+    PRIMARY KEY(family_id)
 );
 
-create table pet_kind(
+CREATE TABLE pet_kind(
 	pet_id INT,
     kind_id INT,
     kind_name VARCHAR(100),
-    primary key(pet_id),
-    foreign key(kind_id) references family_kind(family_id)
+    PRIMARY KEY(pet_id),
+    FOREIGN KEY(kind_id) REFERENCES family_kind(family_id)
 );
 
-create table pet(
+CREATE TABLE pet(
 	pet_id INT,
     pet_name VARCHAR(100),
     pet_kind INT,
     pet_age INT,
-    primary key(pet_id),
-    foreign key(pet_kind) references pet_kind(pet_id)
+    PRIMARY KEY(pet_id),
+    FOREIGN KEY(pet_kind) REFERENCES pet_kind(pet_id)
 );
 
-create table customer(
+CREATE TABLE customer(
 	customer_id INT,
     person_id INT,
     pet_id INT,
-    primary key(customer_id),
-    foreign key(person_id) references person(person_id),
-    foreign key(pet_id) references pet(pet_id)
+    PRIMARY KEY(customer_id),
+    FOREIGN KEY(person_id) REFERENCES person(person_id),
+	FOREIGN KEY(pet_id) REFERENCES pet(pet_id)
 );
 
 
@@ -78,15 +78,15 @@ create table crew(
 	member_id INT,
     role_id INT,
     person_id INT,
-    primary key(member_id),
-    foreign key(role_id) references store_role(role_id),
-    foreign key(person_id) references person(person_id)
+    PRIMARY KEY(member_id),
+    FOREIGN KEY(role_id) REFERENCES store_role(role_id),
+    FOREIGN KEY(person_id) REFERENCES person(person_id)
 );
 
-create table category(
+CREATE TABLE category(
 	category_id INT,
     category_name VARCHAR(100),
-    primary key(category_id)
+	PRIMARY KEY(category_id)
 );
 
 create table product(
@@ -95,17 +95,17 @@ create table product(
     category INT,
     price INT,
     amount INT,
-    primary key(product_id),
-    foreign key(category) references category(category_id)
+    PRIMARY KEY(product_id),
+    FOREIGN KEY(category) REFERENCES category(category_id)
 );
 
-create table inventory_changes(
+CREATE TABLE inventory_changes(
 	product_id INT, 
     member_id INT,
     change_date DATE,
-    primary key(product_id),
-    foreign key(product_id) references product(product_id),
-    foreign key(member_id) references crew(member_id)
+    PRIMARY KEY(product_id),
+    FOREIGN KEY(product_id) REFERENCES product(product_id),
+    FOREIGN KEY(member_id) REFERENCES crew(member_id)
 );
 
 create table delivery(
@@ -113,25 +113,32 @@ create table delivery(
     member_id INT,
     order_date DATE,
     delivery_price INT,
-    primary key(delivery_id),
-    foreign key(member_id) references crew(member_id)
+    PRIMARY KEY(delivery_id),
+    FOREIGN KEY(member_id) REFERENCES crew(member_id)
 );
 
-create table store_order(
+CREATE TABLE store_order(
 	order_id INT NOT NULL AUTO_INCREMENT,
     customer_id INT,
     member_id INT,
     delivery INT,
-    product_id INT,
-    price INT,
+    price INT DEFAULT 0,
     order_date DATE,
-    primary key(order_id),
-    foreign key(customer_id) references customer(customer_id),
-	foreign key(delivery) references delivery(delivery_id),
-	foreign key(product_id) references product(product_id),
-	foreign key(member_id) references crew(member_id)
+    PRIMARY KEY(order_id),
+    FOREIGN KEY(customer_id) REFERENCES customer(customer_id),
+	FOREIGN KEY(delivery) REFERENCES delivery(delivery_id),
+	FOREIGN KEY(member_id) REFERENCES crew(member_id)
 );
-
+-- drop table order_products;
+CREATE TABLE order_products(
+	num INT AUTO_INCREMENT,
+	order_id INT,	
+    product_id INT,
+    product_amount INT,
+    PRIMARY KEY(num),
+    FOREIGN KEY(order_id) REFERENCES store_order(order_id),
+    FOREIGN KEY(product_id) REFERENCES product(product_id)
+);
 
 
 
