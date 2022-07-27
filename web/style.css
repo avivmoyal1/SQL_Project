@@ -2,6 +2,19 @@
     text-align: left;
 }
 
-body{
+main{
     margin-top: 20px;
 }
+
+form,.card{
+    width: 300px;
+    margin-left: 15px;
+
+}
+li{
+    margin: 10px 0;
+}
+.btn{
+    margin: 10px 0;
+}
+

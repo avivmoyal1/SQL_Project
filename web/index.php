@@ -48,13 +48,28 @@
                 <li>Display repeat customers (more than one order).</li>
                 <li>Showing income X months back</li>
             </ol>
-            <form action="#" method="GET">
-                <label></label><input type="number" name="option" min="1" max="8" step="1">
-                <button type="submit" value="Submit" >Submit</button>
-            </form>
 
-            
+            <?php
                 
+            
+            ?>
+            <?php
+                $to_print = 1;
+                if(isset($_GET['option'])){
+                    if(($_GET['option'] == 2 && !isset($_GET['weeks'])) || ( $_GET['option'] == 8 && !isset($_GET['month']))) 
+                    {
+                        $to_print = 0;
+                    }
+                }
+                
+                if($to_print == 1){
+                    echo '<form action="#" method="GET">';
+                    echo '<label><b>Insert a query number</b></label><input type="number" name="option" min="1" max="8" step="1" class="form-control">';
+                    echo '<button type="submit" value="Submit" class="btn btn-primary">Submit</button>';
+                    echo '</form>';
+                }
+            ?>
+   
               <?php
 
                     $op = 0;
@@ -62,33 +77,74 @@
                     if(isset($_GET['option'])){
                         $op = $_GET['option'];
                     }
+
+
                     switch ($op){
                         case 1:
-                           
-                            echo "<b><div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'> product name </div><div class='col-sm-2'> amount</div></div></div></b>";
+                            $count =1;
                             $query = "SELECT product_name, amount from product";
                             $result = mysqli_query($connection,$query); 
-                            while($row = mysqli_fetch_array($result)){
-                                echo "<div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'>" . $row['product_name'] ."</div> <div class='col-sm-2'>" . $row['amount'] . "</div></div></div>";
+                            if(mysqli_num_rows($result) != 0){
+                                echo "<table class='table table-hover'>";
+                                echo "<thead><tr><th scope='col'>#</th><th scope='col'> product name </th><th scope='col'> amount</th></tr></thead><tbody>";
                             }
+                            while($row = mysqli_fetch_array($result)){
+                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['product_name'] ."</td> <td>" . $row['amount'] . "</td></tr>";
+                                $count++;
+                            }
+                            if(mysqli_num_rows($result) != 0){
+                                echo "</tbody></table>";
+                            }
+                            else{
+                                // Need to edit
+                                echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
+                                echo '<div class="card-header"><b>No result</b></div>';
+                                echo '<div class="card-body">';
+                                echo '<p class="card-text">This query did not find any open orders in the database.</p>';
+                                echo '</div>';
+                                echo '</div>';
+                            }
+                            
                             break;
                         case 2:
-                            echo '<form action="#" method="GET">';
-                            echo '<label>weeks? </label><input type="number" name="weeks">';
-                            echo '<input type="number" name="option" value='.$op.' style="display:none">';
-                            echo '<button type="submit" value="Submit" >Submit</button>';
-                            echo '</form>';
-                            
+                            if(!isset($_GET['weeks'])){
+                                echo '<form action="#" method="GET">';
+                                echo '<label>Insert number of weeks </label><input class="form-control type="number" name="weeks">';
+                                echo '<input type="number" name="option" value='.$op.' style="display:none">';
+                                echo '<button type="submit" value="Submit" class="btn btn-primary">Submit</button>';
+                                echo '</form>';
+                            }
                             if(isset($_GET['weeks'])){
-                                echo "<b><div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-1'> order_id </div> <div class='col-sm-1'> customer_id </div> <div class='col-sm-1'> member_id </div> <div class='col-sm-1'> delivery </div> <div class='col-sm-1'> product_id  </div> <div class='col-sm-1'> price </div> <div class='col-sm-1'> order_date </div></div></div></b>";
+
+                                $count =1;
                                 $query = "SELECT * FROM store_order WHERE order_date >= curdate() - INTERVAL ".$_GET['weeks'] ." WEEK";
                                 $result = mysqli_query($connection,$query); 
+                                if(mysqli_num_rows($result) != 0){
+                                    echo "<table class='table table-hover'>";
+                                    echo "<thead><tr><th scope='col'>#</th><th scope='col'> order id </th> <th scope='col'> customer id </th> <<th scope='col'> member id </th> <th scope='col'> delivery </th> <th scope='col'> product id  </th> <th scope='col'> price </th> <th scope='col'> order date </th></tr></thead><tbody>";
+                                }
                                 while($row = mysqli_fetch_array($result)){
-                                    echo "<div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-1'>" . $row['order_id'] ."</div> <div class='col-sm-1'>" . $row['customer_id'] . "</div> <div class='col-sm-1'>" . $row['member_id'] . "</div> <div class='col-sm-1'>" . $row['delivery'] . "</div> <div class='col-sm-1'> " . $row['product_id'] . " </div> <div class='col-sm-1'>" . $row['price'] . "</div> <div class='col-sm-1'> " . $row['order_date'] . "</div></div></div>";
+                                    echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['order_id'] ."</th><td>" . $row['customer_id'] . "</th><td>" . $row['member_id'] . "</th><td>" . $row['delivery'] . "</th><td> " . $row['product_id'] . " </th><td>" . $row['price'] . "</th><td> " . $row['order_date'] . "</td></tr>";
+                                    $count++;
+                                }
+                                if(mysqli_num_rows($result) != 0){
+                                    echo "</tbody></table>";
+                                }
+                                else{
+                                    // Need to edit
+                                    echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
+                                    echo '<div class="card-header"><b>No result</b></div>';
+                                    echo '<div class="card-body">';
+                                    echo '<p class="card-text">This query did not find any open orders in the database.</p>';
+                                    echo '</div>';
+                                    echo '</div>';
+                            
                                 }
                             }
+
                             break;
                         case 3:
+                            $count =1;
                             $query = "SELECT crew.member_id ,p_name, count(*) as amount FROM person 
                             INNER JOIN  crew 
                             ON
@@ -99,14 +155,30 @@
                             group by p_name 
                             ORDER BY amount DESC LIMIT 1";
                             $result = mysqli_query($connection,$query); 
-
-                            echo "<b><div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'> member_id </div> <div class='col-sm-2'> name </div> <div class='col-sm-2'> amount </div> </div></div></b>";
-
+                            if(mysqli_num_rows($result) != 0){
+                                echo "<table class='table table-hover'>";
+                                echo "<thead><tr><th scope='col'>#</th><th scope='col'> member_id </th> <th scope='col'> name </th> <th scope='col'> amount </th></tr></thead><tbody>";
+                            }
                             while($row = mysqli_fetch_array($result)){
-                                echo "<div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'> " . $row['member_id'] ."</div> <div class='col-sm-2'>" . $row['p_name'] . "</div> <div class='col-sm-2'>" . $row['amount'] . "</div></div> </div>";
+                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['member_id'] ."</th><td>" . $row['p_name'] . "</th><td>" . $row['amount'] . "</td></tr>";
+                                $count++;
+                            }
+                            if(mysqli_num_rows($result) != 0){
+                                echo "</tbody></table>";
+                            }
+                            else{
+                                // Need to edit
+                                echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
+                                echo '<div class="card-header"><b>No result</b></div>';
+                                echo '<div class="card-body">';
+                                echo '<p class="card-text">This query did not find any open orders in the database.</p>';
+                                echo '</div>';
+                                echo '</div>';
+                        
                             }
                             break;
                         case 4:
+                            $count =1;
                             $query = "SELECT c.member_id ,p.p_name, sum(s.price) as total FROM person p
                             INNER JOIN  crew c
                             ON
@@ -117,14 +189,33 @@
                             group by p_name 
                             ORDER BY total DESC LIMIT 1";
                             $result = mysqli_query($connection,$query); 
+                            if(mysqli_num_rows($result) != 0){
 
-                            echo "<b><div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'> member id </div> <div class='col-sm-2'> name </div> <div class='col-sm-2'> total </div> </div></div></b>";
+                                echo "<table class='table table-hover'>";
+                                echo "<thead><tr><th scope='col'>#</th><th scope='col'> member id </th> <th scope='col'> name </th> <th scope='col'> total </th></tr></thead><tbody>";
+                            }
 
                             while($row = mysqli_fetch_array($result)){
-                                echo "<div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'>" . $row['member_id'] ."</div> <div class='col-sm-2'>" . $row['p_name'] . "</div> <div class='col-sm-2'>" . $row['total'] . "</div></div> </div>";
+                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['member_id'] ."</th><td>" . $row['p_name'] . "</th><td>" . $row['total'] . "</td></tr>";
+                                $count++;
+                            
+                            }
+                            if(mysqli_num_rows($result) != 0){
+                                echo "</tbody></table>";
+                            }
+                            else{
+                                // Need to edit
+                                echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
+                                echo '<div class="card-header"><b>No result</b></div>';
+                                echo '<div class="card-body">';
+                                echo '<p class="card-text">This query did not find any open orders in the database.</p>';
+                                echo '</div>';
+                                echo '</div>';
+                        
                             }
                             break;
                         case 5:
+                            $count =1;
                             $query = "SELECT  c.customer_id, p.p_name, s.order_id, s.product_id,s.price FROM person p	
                             INNER JOIN customer c 
                             ON
@@ -133,19 +224,33 @@
                             ON
                                 s.customer_id = c.customer_id
                             where s.delivery IS NULL";
-                            $result = mysqli_query($connection,$query); 
-                            echo "<b><div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'> customer id </div> <div class='col-sm-2'> name </div> <div class='col-sm-2'> order id </div> <div class='col-sm-2'> product id </div> <div class='col-sm-2'> price </div></div></div></b>";
-                            while($row = mysqli_fetch_array($result)){
-                                echo "<div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'>" . $row['customer_id'] ."</div> <div class='col-sm-2'>" . $row['p_name'] . "</div> <div class='col-sm-2'>" . $row['order_id'] . "</div> <div class='col-sm-2'>" .$row['product_id']. "</div> <div class='col-sm-2'>" .$row['price']." </div></div</div>";
-                                $flag++;
+                            $result = mysqli_query($connection,$query);
+                            if(mysqli_num_rows($result) != 0){
+                                
+                                echo "<table class='table table-hover'>"; 
+                                echo "<thead><tr><th scope='col'>#</th><th scope='col'> customer id </th> <th scope='col'> name </th> <th scope='col'> order id </th> <th scope='col'> product id </th> <th scope='col'> price </th></tr></thead><tbody>";
                             }
-                            if($flag == 0){
-                                echo "balalbablabl";
-                                $flag =0;
+                            while($row = mysqli_fetch_array($result)){
+                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['customer_id'] ."</th><td>" . $row['p_name'] . "</th><td>" . $row['order_id'] . "</th><td>" .$row['product_id']. "</th><td>" .$row['price']." </td></tr>";
+                                $count++;
+                                
+                            }
+                            if(mysqli_num_rows($result) != 0){
+                            echo "</tbody></table>";
+                            }
+                            else{
+                                echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
+                                echo '<div class="card-header"><b>No result</b></div>';
+                                echo '<div class="card-body">';
+                                echo '<p class="card-text">This query did not find any open orders in the database.</p>';
+                                echo '</div>';
+                                echo '</div>';
+                      
                             }
                             
                             break;
                         case 6:
+                            $count =1;
                             $query = "SELECT  c.customer_id, p.p_name FROM person p	
                             INNER JOIN customer c 
                             ON
@@ -154,15 +259,34 @@
                             ON
                                 s.customer_id = c.customer_id
                             WHERE s.customer_id IS NULL";
-                            $result = mysqli_query($connection,$query); 
-
-                            echo "<b><div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'> customer id </div> <div class='col-sm-2'> name </div></div></div></b>";
-
+                            $result = mysqli_query($connection,$query);
+                            if(mysqli_num_rows($result) != 0){
+                                
+                                echo "<table class='table table-hover'>"; 
+                                echo "<thead><tr><th scope='col'>#</th><th scope='col'> customer id </th> <th scope='col'> name </th></tr></thead><tbody>";
+                            } 
                             while($row = mysqli_fetch_array($result)){
-                                echo "<div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'>" . $row['customer_id'] ."</div> <div class='col-sm-2'>" . $row['p_name'] . " </div></div></div>";
+                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['customer_id'] ."</th><td>" . $row['p_name'] . " </th><td>";
+                                $count++;
+                            }
+
+                            if(mysqli_num_rows($result) != 0){
+                                echo "</tbody></table>";
+                                }
+                            else{
+                                // Need to edit
+                                echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
+                                echo '<div class="card-header"><b>No result</b></div>';
+                                echo '<div class="card-body">';
+                                echo '<p class="card-text">This query did not find any open orders in the database.</p>';
+                                echo '</div>';
+                                echo '</div>';
+                        
                             }
                             break;
                         case 7:
+                            $count =1;
+
                             $query = "SELECT c.customer_id, p.p_name, count(*) AS delivery_amount FROM person p 
                             INNER JOIN customer c
                             ON 	
@@ -174,28 +298,67 @@
                             having delivery_amount > 1
                             ORDER BY delivery_amount DESC";
                             $result = mysqli_query($connection,$query); 
-
-                            echo "<b><div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'> customer id </div> <div class='col-sm-2'> name </div><div class='col-sm-2'> order amount </div></div></div></b>";
-
+                            if(mysqli_num_rows($result) != 0){
+                                
+                                echo "<table class='table table-hover'>"; 
+                                echo "<thead><tr><th scope='col'>#</th><th scope='col'> customer id </th> <th scope='col'> name </th> <th scope='col'>order amount</th></tr></thead><tbody>";
+                            } 
                             while($row = mysqli_fetch_array($result)){
-                                echo "<div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'>" . $row['customer_id'] ."</div> <div class='col-sm-2'>" . $row['p_name'] ."</div> <div class='col-sm-2'>" . $row['delivery_amount'] . " </div></div></div>";
+                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['customer_id'] ."</th><td>" . $row['p_name'] ."</th><td>" . $row['delivery_amount'] . "</th><td>";
+                                $count++;
                             }
+                            if(mysqli_num_rows($result) != 0){
+                                echo "</tbody></table>";
+                                }
+                            else{
+                                // Need to edit
+                                echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
+                                echo '<div class="card-header"><b>No result</b></div>';
+                                echo '<div class="card-body">';
+                                echo '<p class="card-text">This query did not find any open orders in the database.</p>';
+                                echo '</div>';
+                                echo '</div>';
+                        
+                            }
+                            
                             break;
                         case 8:
-                            echo '<form action="#" method="GET">';
-                            echo '<label>month? </label><input type="number" name="month">';
-                            echo '<input type="number" name="option" value='.$op.' style="display:none">';
-                            echo '<button type="submit" value="Submit" >Submit</button>';
-                            echo '</form>';
-                            
+                            $count =1;
+
+                            if(!isset($_GET['month'])){
+                                echo '<form action="#" method="GET">';
+                                echo '<label><b>Insert number of months<b> </label><input class="form-control type="number" type="number" name="month">';
+                                echo '<input type="number" name="option" value='.$op.' style="display:none">';
+                                echo '<button type="submit" value="Submit" class="btn btn-primary">Submit</button>';
+                                echo '</form>';
+                            }
+
                             if(isset($_GET['month'])){
-                                echo "<b><div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'> revenues </div></div></div></b>";
                                 $query = "SELECT sum(price) as revenues FROM store_order 
                                 WHERE order_date >= curdate() - INTERVAL " .$_GET['month']. " month"; 
-                                
                                 $result = mysqli_query($connection,$query); 
+
+                                if(mysqli_num_rows($result) != 0){
+                                
+                                    echo "<table class='table table-hover'>"; 
+                                    echo "<thead><tr><th scope='col'>#</th><th scope='col'> revenues </th></tr></thead><tbody>";
+                                } 
                                 while($row = mysqli_fetch_array($result)){
-                                    echo "<div class='container text-center'><div class='row row-cols-auto'><div class='col-sm-2'>" . $row['revenues'] ."</div></div></div>";
+                                    echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['revenues'] ."</th><td>";
+                                    $count++;
+                                }
+                                if(mysqli_num_rows($result) != 0){
+                                    echo "</tbody></table>";
+                                    }
+                                else{
+                                    // Need to edit
+                                    echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
+                                    echo '<div class="card-header"><b>No result</b></div>';
+                                    echo '<div class="card-body">';
+                                    echo '<p class="card-text">This query did not find any open orders in the database.</p>';
+                                    echo '</div>';
+                                    echo '</div>';
+                            
                                 }
                             }
                             break;
@@ -217,6 +380,6 @@
 </html>
 
 <?php
-    // mysqli_close($connection);
+    mysqli_close($connection);
 ?>
 
