@@ -19,17 +19,17 @@ values
     
 insert into person(person_id,p_name,p_address,p_phone) 
 values
-	(1000,"Shlomi",1,0501111111),(1001,"Ruth",2,0522222222),(1002,"Narkis",3,0533333333),(1003,"Avraham",4,0544444444),(1004,"Ben",5,0555555555),(1005,"Ofek",6,0566666666),(1006,"Daniel",7,0577777777),(1007,"Shaul",8,0588888888),(1008,"Gefen",9,0599999999);
+	(1000,"Shlomi",1,0501111111),(1001,"Ruth",2,0522222222),(1002,"Narkis",3,0533333333),(1003,"Avraham",4,0544444444),(1004,"Ben",5,0555555555),(1005,"Ofek",6,0566666666),(1006,"Daniel",7,0577777777),(1007,"Shaul",8,0588888888),(1008,"Gefen",9,0599999999),(1009,"Rami",1,0502111111),(1010,"Aviv",1,0502131111);
     
 insert into crew(member_id,role_id,person_id)
 values 
-	(2000,1,1000),(2001,4,1001),(2002,3,1002),(2003,2,1003),(2004,5,1004);
+	(2000,1,1000),(2001,4,1001),(2002,3,1002),(2003,2,1003),(2004,5,1004),(84,1,1009),(85,1,1010);
 
 insert into family_kind(family_id,family_name) 
 values
 	(1,"Dog"),(2,"Cat"),(3,"Rabbit"),(4,"Parrot"),(5,"Chameleon"),(6,"Fish"),(7,"Iguana"),(8,"Hamster");
     
-insert into pet_kind(pet_id,kind_id,kind_name)
+insert into pet_kind(pet_id,family_id,kind_name)
 values
 	(60,1,"Labrador"),(61,1,"Border Collie"),(62,1,"Poodle"),(63,2,"Siamese"),(64,2,"Persian"),(65,3,"Netherland Dwarf"),(66,3,"American Fuzzy Lop"),(67,4,"African Grey"),(68,4,"Cockatoos"),(69,5,"Panther"),(70,5,"Veiled"),(71,6,"Golden"),(72,6,"Salmon"),(73,7,"Green"),(74,7,"Cuban Rock"),(75,8,"Dwarf Roborovski"),(76,8,"Campbell’s Dwarf Russian");
     
@@ -63,6 +63,5 @@ values
 
 insert into store_order (order_id,customer_id,member_id,order_date)
 values   
-    (6005,10000,80,"2022-07-25");
+    (6005,10000,80,"2022-07-25"),(6006,10000,84,"2022-07-25"),(6007,10005,85,"2022-07-25");
     
- 
