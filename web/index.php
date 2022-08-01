@@ -5,13 +5,6 @@
     $dbpass = "db123456";
     $dbname = "pet_store";
 
-    // define("URL" , "http://se.shenkar.ac.il/students/2021-2022/web1/dev_201/");
-    // session_start();
-    // if(empty($_SESSION["user_id"]))
-    // {
-    //     header('Location:' . URL . 'login.php');
-    // }
-    
     $connection = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
      if(mysqli_connect_errno()) {
          die("DB connection failed: " . mysqli_connect_error() . " (" . mysqli_connect_errno() . ")"
@@ -31,8 +24,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 
 
-
-</head >
+</head>
 
 <body class="container">
         <header>
@@ -95,7 +87,6 @@
                                 echo "</tbody></table>";
                             }
                             else{
-                                // Need to edit
                                 echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
                                 echo '<div class="card-header"><b>No result</b></div>';
                                 echo '<div class="card-body">';
@@ -130,7 +121,6 @@
                                     echo "</tbody></table>";
                                 }
                                 else{
-                                    // Need to edit
                                     echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
                                     echo '<div class="card-header"><b>No result</b></div>';
                                     echo '<div class="card-body">';
@@ -166,7 +156,6 @@
                                 echo "</tbody></table>";
                             }
                             else{
-                                // Need to edit
                                 echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
                                 echo '<div class="card-header"><b>No result</b></div>';
                                 echo '<div class="card-body">';
@@ -203,7 +192,6 @@
                                 echo "</tbody></table>";
                             }
                             else{
-                                // Need to edit
                                 echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
                                 echo '<div class="card-header"><b>No result</b></div>';
                                 echo '<div class="card-body">';
@@ -273,7 +261,6 @@
                                 echo "</tbody></table>";
                                 }
                             else{
-                                // Need to edit
                                 echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
                                 echo '<div class="card-header"><b>No result</b></div>';
                                 echo '<div class="card-body">';
@@ -310,7 +297,6 @@
                                 echo "</tbody></table>";
                                 }
                             else{
-                                // Need to edit
                                 echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
                                 echo '<div class="card-header"><b>No result</b></div>';
                                 echo '<div class="card-body">';
@@ -350,7 +336,6 @@
                                     echo "</tbody></table>";
                                     }
                                 else{
-                                    // Need to edit
                                     echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
                                     echo '<div class="card-header"><b>No result</b></div>';
                                     echo '<div class="card-body">';
@@ -362,15 +347,9 @@
                             }
                             break;
                         default:
-                            //
                         
                         }
 
-                    // $query = "SELECT product_name, amount from product";
-                    // $result = mysqli_query($connection,$query); 
-                    // while($row = mysqli_fetch_array($result)){
-                    //     echo $row['product_name'] ;
-                    // }
                 ?>
           
      
