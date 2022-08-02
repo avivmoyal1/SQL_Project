@@ -1,4 +1,4 @@
- drop database pet_store;
+drop database pet_store;
 
 CREATE DATABASE pet_store;
 
@@ -36,7 +36,7 @@ CREATE TABLE person(
 	person_id INT NOT NULL AUTO_INCREMENT,
     p_name VARCHAR(100),
     p_address INT,
-    p_phone int,
+    p_phone varchar(20),
     PRIMARY KEY(person_id),
     FOREIGN KEY(p_address) REFERENCES address(address_id)
 );

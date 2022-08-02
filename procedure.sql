@@ -26,18 +26,22 @@ END; $$
 DELIMITER ;
 
 -- 2
-
+DROP PROCEDURE bestseller;
 DELIMITER $$ 
 
 CREATE PROCEDURE bestseller(in_amount INT, in_days INT)
 BEGIN
-	SELECT p.product_id, p.product_name, p.category, p.price FROM product p
-		INNER JOIN store_order s
+
+        SELECT p.product_id, p.product_name, p.category, p.price ,sum(o.product_amount) AS amount, (p.price * sum(o.product_amount)) AS total_price FROM product p
+		INNER JOIN order_products o
+		ON
+			o.product_id = p.product_id
+		INNER JOIN store_order s 
 		ON 
-			p.product_id = s.product_id
+			s.order_id = o.order_id
 		WHERE s.order_date >= curdate() - INTERVAL in_days DAY
 		GROUP BY p.product_id
-		ORDER BY count(p.product_id) DESC LIMIT in_amount;
+		ORDER BY amount DESC limit in_amount;
 
 END; $$
 
