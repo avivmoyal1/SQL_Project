@@ -1,4 +1,4 @@
-drop database pet_store;
+-- drop database pet_store;
 
 CREATE DATABASE pet_store;
 
