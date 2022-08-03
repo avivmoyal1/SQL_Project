@@ -113,7 +113,7 @@ CREATE TABLE inventory_changes(
 create table delivery(
 	delivery_id INT NOT NULL AUTO_INCREMENT,
     member_id INT,
-    order_date DATE,
+    delivery_date DATE,
     delivery_price INT,
     PRIMARY KEY(delivery_id),
     FOREIGN KEY(member_id) REFERENCES crew(member_id)

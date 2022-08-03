@@ -26,7 +26,7 @@ END; $$
 DELIMITER ;
 
 -- 2
-DROP PROCEDURE bestseller;
+-- DROP PROCEDURE bestseller;
 DELIMITER $$ 
 
 CREATE PROCEDURE bestseller(in_amount INT, in_days INT)

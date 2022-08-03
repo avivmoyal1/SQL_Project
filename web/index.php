@@ -99,22 +99,32 @@
                         case 2:
                             if(!isset($_GET['weeks'])){
                                 echo '<form action="#" method="GET">';
-                                echo '<label>Insert number of weeks </label><input class="form-control type="number" name="weeks">';
+                                echo '<label><b>Insert number of weeks </b></label><input class="form-control type="number" name="weeks">';
                                 echo '<input type="number" name="option" value='.$op.' style="display:none">';
                                 echo '<button type="submit" value="Submit" class="btn btn-primary">Submit</button>';
                                 echo '</form>';
                             }
-                            if(isset($_GET['weeks'])){
+                            else{
 
                                 $count =1;
-                                $query = "SELECT * FROM store_order WHERE order_date >= curdate() - INTERVAL ".$_GET['weeks'] ." WEEK";
+                                $query = "SELECT s.order_id, s.customer_id, s.member_id, s.delivery, s.price, s.order_date, p.product_name, o.product_amount FROM store_order s
+                                LEFT JOIN order_products o 
+                                ON
+                                    s.order_id = o.order_id
+                                LEFT JOIN product p
+                                ON
+                                    p.product_id = o.product_id
+                                WHERE order_date >= curdate() - INTERVAL ".$_GET['weeks'] ." WEEK ORDER BY order_date DESC";
+
                                 $result = mysqli_query($connection,$query); 
                                 if(mysqli_num_rows($result) != 0){
                                     echo "<table class='table table-hover'>";
-                                    echo "<thead><tr><th scope='col'>#</th><th scope='col'> order id </th> <th scope='col'> customer id </th> <<th scope='col'> member id </th> <th scope='col'> delivery </th> <th scope='col'> product id  </th> <th scope='col'> price </th> <th scope='col'> order date </th></tr></thead><tbody>";
+                                    echo "<thead><tr><th scope='col'>#</th><th scope='col'> order id </th> <th scope='col'> customer id </th> <th scope='col'> employee id </th> <th scope='col'> delivery id </th> <th scope='col'> price  </th> <th scope='col'> date </th> <th scope='col'> product name </th> <th scope='col'> product amount </th></tr></thead><tbody>";
                                 }
+                                
                                 while($row = mysqli_fetch_array($result)){
-                                    echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['order_id'] ."</th><td>" . $row['customer_id'] . "</th><td>" . $row['member_id'] . "</th><td>" . $row['delivery'] . "</th><td> " . $row['product_id'] . " </th><td>" . $row['price'] . "</th><td> " . $row['order_date'] . "</td></tr>";
+                                    echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['order_id'] ."</th><td>" . $row['customer_id'] . "</th><td>" . $row['member_id'] . "</th><td>" . $row['delivery'] . "</th><td> " . $row['price'] . " </th><td>" . $row['order_date'] . "</th><td> " . $row['product_name'] ."</th><td> " . $row['product_amount'] . "</td></tr>";
+                                    $priv =$check;
                                     $count++;
                                 }
                                 if(mysqli_num_rows($result) != 0){
@@ -134,22 +144,26 @@
                             break;
                         case 3:
                             $count =1;
-                            $query = "SELECT crew.member_id ,p_name, count(*) as amount FROM person 
-                            INNER JOIN  crew 
+                            $query = "SELECT c.member_id ,p.p_name,sum(o.product_amount) AS total_amount FROM person p
+                            INNER JOIN crew c 
                             ON
-                                crew.person_id = person.person_id 
-                            INNER JOIN store_order
+                                c.person_id = p.person_id
+                            INNER JOIN store_order s
                             ON
-                                store_order.member_id = crew.member_id
-                            group by p_name 
-                            ORDER BY amount DESC LIMIT 1";
+                                s.member_id = c.member_id
+                            LEFT JOIN order_products o
+                            ON 
+                                o.order_id = s.order_id
+                            group by p.p_name
+                            order by sum(o.product_amount) DESC LIMIT 1";
+                            
                             $result = mysqli_query($connection,$query); 
                             if(mysqli_num_rows($result) != 0){
                                 echo "<table class='table table-hover'>";
-                                echo "<thead><tr><th scope='col'>#</th><th scope='col'> member_id </th> <th scope='col'> name </th> <th scope='col'> amount </th></tr></thead><tbody>";
+                                echo "<thead><tr><th scope='col'>#</th><th scope='col'> member id </th> <th scope='col'> name </th> <th scope='col'> amount </th></tr></thead><tbody>";
                             }
                             while($row = mysqli_fetch_array($result)){
-                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['member_id'] ."</th><td>" . $row['p_name'] . "</th><td>" . $row['amount'] . "</td></tr>";
+                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['member_id'] ."</th><td>" . $row['p_name'] . "</th><td>" . $row['total_amount'] . "</td></tr>";
                                 $count++;
                             }
                             if(mysqli_num_rows($result) != 0){
@@ -167,15 +181,18 @@
                             break;
                         case 4:
                             $count =1;
-                            $query = "SELECT c.member_id ,p.p_name, sum(s.price) as total FROM person p
-                            INNER JOIN  crew c
+                            $query = "SELECT c.member_id ,p.p_name, sum(s.price) AS total_price FROM person p
+                            INNER JOIN crew c 
                             ON
-                                c.person_id = p.person_id 
+                                c.person_id = p.person_id
                             INNER JOIN store_order s
                             ON
                                 s.member_id = c.member_id
-                            group by p_name 
-                            ORDER BY total DESC LIMIT 1";
+                            LEFT JOIN order_products o
+                            ON 
+                                o.order_id = s.order_id
+                            GROUP BY p.p_name
+                            ORDER BY total_price DESC LIMIT 1";
                             $result = mysqli_query($connection,$query); 
                             if(mysqli_num_rows($result) != 0){
 
@@ -184,7 +201,7 @@
                             }
 
                             while($row = mysqli_fetch_array($result)){
-                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['member_id'] ."</th><td>" . $row['p_name'] . "</th><td>" . $row['total'] . "</td></tr>";
+                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['member_id'] ."</th><td>" . $row['p_name'] . "</th><td>" . $row['total_price'] . "</td></tr>";
                                 $count++;
                             
                             }
@@ -203,27 +220,33 @@
                             break;
                         case 5:
                             $count =1;
-                            $query = "SELECT  c.customer_id, p.p_name, s.order_id, s.product_id,s.price FROM person p	
+                            $query = "SELECT c.customer_id, p.p_name, s.order_id, pr.product_name,s.price FROM person p	
                             INNER JOIN customer c 
                             ON
                                 p.person_id = c.person_id
                             INNER JOIN store_order s 
                             ON
                                 s.customer_id = c.customer_id
-                            where s.delivery IS NULL";
+                            LEFT JOIN order_products o
+                            ON
+                                o.order_id = s.order_id
+                            LEFT JOIN product pr
+                            ON
+                                pr.product_id = o.product_id
+                            WHERE delivery IS NULL";
                             $result = mysqli_query($connection,$query);
                             if(mysqli_num_rows($result) != 0){
                                 
                                 echo "<table class='table table-hover'>"; 
-                                echo "<thead><tr><th scope='col'>#</th><th scope='col'> customer id </th> <th scope='col'> name </th> <th scope='col'> order id </th> <th scope='col'> product id </th> <th scope='col'> price </th></tr></thead><tbody>";
+                                echo "<thead><tr><th scope='col'>#</th><th scope='col'> customer id </th> <th scope='col'> name </th> <th scope='col'> order id </th> <th scope='col'> product name </th> <th scope='col'> price </th></tr></thead><tbody>";
                             }
                             while($row = mysqli_fetch_array($result)){
-                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['customer_id'] ."</th><td>" . $row['p_name'] . "</th><td>" . $row['order_id'] . "</th><td>" .$row['product_id']. "</th><td>" .$row['price']." </td></tr>";
+                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['customer_id'] ."</th><td>" . $row['p_name'] . "</th><td>" . $row['order_id'] . "</th><td>" .$row['product_name']. "</th><td>" .$row['price']." </td></tr>";
                                 $count++;
                                 
                             }
                             if(mysqli_num_rows($result) != 0){
-                            echo "</tbody></table>";
+                                echo "</tbody></table>";
                             }
                             else{
                                 echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
@@ -259,7 +282,7 @@
 
                             if(mysqli_num_rows($result) != 0){
                                 echo "</tbody></table>";
-                                }
+                            }
                             else{
                                 echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
                                 echo '<div class="card-header"><b>No result</b></div>';
@@ -295,6 +318,13 @@
                             }
                             if(mysqli_num_rows($result) != 0){
                                 echo "</tbody></table>";
+                            }
+                            while($row = mysqli_fetch_array($result)){
+                                echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['customer_id'] ."</th><td>" . $row['p_name'] ."</th><td>" . $row['delivery_amount'] . "</th><td>";
+                                $count++;
+                            }
+                            if(mysqli_num_rows($result) != 0){
+                                echo "</tbody></table>";
                                 }
                             else{
                                 echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
@@ -312,13 +342,12 @@
 
                             if(!isset($_GET['month'])){
                                 echo '<form action="#" method="GET">';
-                                echo '<label><b>Insert number of months<b> </label><input class="form-control type="number" type="number" name="month">';
+                                echo '<label><b>Insert number of months</b> </label><input class="form-control type="number" type="number" name="month">';
                                 echo '<input type="number" name="option" value='.$op.' style="display:none">';
                                 echo '<button type="submit" value="Submit" class="btn btn-primary">Submit</button>';
                                 echo '</form>';
                             }
-
-                            if(isset($_GET['month'])){
+                            else{
                                 $query = "SELECT sum(price) as revenues FROM store_order 
                                 WHERE order_date >= curdate() - INTERVAL " .$_GET['month']. " month"; 
                                 $result = mysqli_query($connection,$query); 
@@ -334,7 +363,7 @@
                                 }
                                 if(mysqli_num_rows($result) != 0){
                                     echo "</tbody></table>";
-                                    }
+                                }
                                 else{
                                     echo '<div class="card text-bg-light   mb-3" style="max-width: 18rem;">';
                                     echo '<div class="card-header"><b>No result</b></div>';
