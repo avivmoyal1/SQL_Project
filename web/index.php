@@ -31,14 +31,14 @@
         </header>
         <main>
             <ol>
-                <li>Display of all products and stock quantity</li>
-                <li>Show all the orders in the last X weeks</li>
-                <li>Show the employee who sold the most products</li>
-                <li>Show the employee who sold the most</li>
+                <li>Display all products and stock quantity</li>
+                <li>Display all orders in the last X weeks</li>
+                <li>Display the employee who sold the most products</li>
+                <li>Display the employee who earned the most for the store</li>
                 <li>Display active orders and the customer who ordered</li>
-                <li>Display customers who have not placed any orders.</li>
-                <li>Display repeat customers (more than one order).</li>
-                <li>Showing income X months back</li>
+                <li>Display all customers who have not placed any orders.</li>
+                <li>Display repeated customers</li>
+                <li>Display the revenues X months back</li>
             </ol>
 
             <?php
