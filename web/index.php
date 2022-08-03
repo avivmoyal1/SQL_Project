@@ -107,7 +107,7 @@
                             else{
 
                                 $count =1;
-                                $query = "SELECT s.order_id, s.customer_id, s.member_id, s.delivery, s.price, s.order_date, p.product_name, o.product_amount FROM store_order s
+                                $query = "SELECT s.order_id, s.customer_id, s.member_id, s.delivery, p.price, s.order_date, p.product_name, o.product_amount FROM store_order s
                                 LEFT JOIN order_products o 
                                 ON
                                     s.order_id = o.order_id
@@ -124,7 +124,6 @@
                                 
                                 while($row = mysqli_fetch_array($result)){
                                     echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['order_id'] ."</th><td>" . $row['customer_id'] . "</th><td>" . $row['member_id'] . "</th><td>" . $row['delivery'] . "</th><td> " . $row['price'] . " </th><td>" . $row['order_date'] . "</th><td> " . $row['product_name'] ."</th><td> " . $row['product_amount'] . "</td></tr>";
-                                    $priv =$check;
                                     $count++;
                                 }
                                 if(mysqli_num_rows($result) != 0){
@@ -220,7 +219,7 @@
                             break;
                         case 5:
                             $count =1;
-                            $query = "SELECT c.customer_id, p.p_name, s.order_id, pr.product_name,s.price FROM person p	
+                            $query = "SELECT c.customer_id, p.p_name, s.order_id, pr.product_name,pr.price FROM person p	
                             INNER JOIN customer c 
                             ON
                                 p.person_id = c.person_id

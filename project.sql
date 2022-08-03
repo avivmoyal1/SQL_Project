@@ -329,13 +329,15 @@ values
 	(6000,150,1),(6001,151,2),(6002,152,1),(6003,153,1),(6004,154,1),(6005,155,6),(6006,156,15),(6007,157,2),(6008,158,2),(6009,159,3),(6009,151,1),(6009,150,1),(6009,152,1),(6000,151,2),(6001,155,1);
     
     
+select employee_income("Yarden",'03','2022');
+
 -- Querys ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -- 1 -----------------------------------------------------------------------------------------------
 SELECT product_name, amount from product;
 
 -- 2 ----------------------------------------------------------------------------------------------- 
-SELECT s.order_id, s.customer_id, s.member_id, s.delivery, s.price, s.order_date, p.product_name, o.product_amount FROM store_order s
+SELECT s.order_id, s.customer_id, s.member_id, s.delivery, p.price, s.order_date, p.product_name, o.product_amount FROM store_order s
 	LEFT JOIN order_products o 
 	ON
 		s.order_id = o.order_id
@@ -385,7 +387,7 @@ SELECT c.member_id ,p.p_name, sum(s.price) AS total_price FROM person p
 		o.order_id = s.order_id;  
     
 -- 5  -----------------------------------------------------------------------------------------------
-SELECT c.customer_id, p.p_name, s.order_id, pr.product_name,s.price FROM person p	
+SELECT c.customer_id, p.p_name, s.order_id, pr.product_name,pr.price FROM person p	
 	INNER JOIN customer c 
     ON
 		p.person_id = c.person_id
