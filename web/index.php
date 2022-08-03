@@ -1,5 +1,4 @@
 <?php
-    // include "config.php";
     $dbhost = "localhost";
     $dbuser = "root";
     $dbpass = "db123456";
@@ -30,6 +29,7 @@
         <header>
         </header>
         <main>
+            <h1>Aviv & Itay's pet store</h1>
             <ol>
                 <li>Display all products and stock quantity</li>
                 <li>Display all orders in the last X weeks</li>
