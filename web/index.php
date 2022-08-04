@@ -107,7 +107,7 @@
                             else{
 
                                 $count =1;
-                                $query = "SELECT s.order_id, s.customer_id, s.member_id, s.delivery, p.price, s.order_date, p.product_name, o.product_amount FROM store_order s
+                                $query = "SELECT s.order_id, s.customer_id, s.member_id, s.delivery, s.order_date, p.product_name, o.product_amount, (p.price * o.product_amount) AS product_total_price, s.price AS order_price FROM store_order s
                                 LEFT JOIN order_products o 
                                 ON
                                     s.order_id = o.order_id
@@ -119,11 +119,11 @@
                                 $result = mysqli_query($connection,$query); 
                                 if(mysqli_num_rows($result) != 0){
                                     echo "<table class='table table-hover'>";
-                                    echo "<thead><tr><th scope='col'>#</th><th scope='col'> order id </th> <th scope='col'> customer id </th> <th scope='col'> employee id </th> <th scope='col'> delivery id </th> <th scope='col'> price  </th> <th scope='col'> date </th> <th scope='col'> product name </th> <th scope='col'> product amount </th></tr></thead><tbody>";
+                                    echo "<thead><tr><th scope='col'>#</th><th scope='col'> order id </th> <th scope='col'> customer id </th> <th scope='col'> employee id </th> <th scope='col'> delivery id </th> <th scope='col'> order date </th> <th scope='col'> product name </th> <th scope='col'> product amount </th> <th scope='col'> product total price </th> <th scope='col'> order price  </th></tr></thead><tbody>";
                                 }
                                 
                                 while($row = mysqli_fetch_array($result)){
-                                    echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['order_id'] ."</th><td>" . $row['customer_id'] . "</th><td>" . $row['member_id'] . "</th><td>" . $row['delivery'] . "</th><td> " . $row['price'] . " </th><td>" . $row['order_date'] . "</th><td> " . $row['product_name'] ."</th><td> " . $row['product_amount'] . "</td></tr>";
+                                    echo "<tr><th scope='row'>" .$count . "</th><td>" . $row['order_id'] ."</th><td>" . $row['customer_id'] . "</th><td>" . $row['member_id'] . "</th><td>" . $row['delivery'] . "</th><td> " . $row['order_date'] . "</th><td> " . $row['product_name'] ."</th><td> " . $row['product_amount'] . "</th><td> " . $row['product_total_price'] . "</th><td> " . $row['order_price'] .  "</td></tr>";
                                     $count++;
                                 }
                                 if(mysqli_num_rows($result) != 0){

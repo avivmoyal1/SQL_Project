@@ -1,3 +1,5 @@
+-- Aviv Moyal - 311437107 | Itay Aharoni - 208990028
+
 -- Create table ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 CREATE DATABASE pet_store;
@@ -277,7 +279,7 @@ values
     
 insert into store_role(role_id,role_name)
 values 
-	(1,"cashier"),(2,"storage_keeper"),(3,"delivery_guy");
+	(1,"cashier"),(2,"storage keeper"),(3,"delivery guy");
     
 insert into person(person_id,p_name,p_address,p_phone) 
 values
@@ -301,7 +303,7 @@ values
     
 insert into crew(member_id,role_id,person_id)
 values
-	(80,1,1006),(81,2,1018),(82,3,1007),(83,2,1008),(84,1,1009),(85,1,1010),(86,1,1010),(87,1,1011),(88,3,1016),(89,1,1017),(90,1,1018);
+	(80,1,1006),(81,2,1018),(82,3,1007),(83,2,1008),(84,1,1009),(85,1,1010),(86,1,1011),(87,3,1016),(88,1,1017),(89,1,1018);
     
 insert into category (category_id,category_name)
 values
@@ -313,12 +315,11 @@ values
     
 insert into delivery (delivery_id,member_id,delivery_date,delivery_price)
 values
-	(500,82,"2022-02-06",50),(501,82,"2022-07-06",40),(502,82,'2022-07-24',10),(503,82,'2022-07-25',50),(504,88,'2022-07-25',50);
-    
+	(500,82,"2022-02-06",50),(501,82,"2022-07-06",40),(502,82,'2022-07-24',10),(503,82,'2022-07-25',50),(504,87,'2022-07-25',50);
     
 insert into store_order (order_id,customer_id,member_id,delivery,order_date)
 values
-	(6000,10000,80,500,"2022-02-06"),(6001,10001,81,501,"2022-03-06"),(6002,10002,82,502,"2022-03-24"),(6003,10004,80,503,"2022-04-15"),(6004,10004,80,504,"2022-05-25");
+	(6000,10000,80,500,"2022-02-06"),(6001,10001,89,501,"2022-03-06"),(6002,10002,88,502,"2022-03-24"),(6003,10004,80,503,"2022-04-15"),(6004,10004,80,504,"2022-05-25");
 
 insert into store_order (order_id,customer_id,member_id,order_date)
 values   
@@ -337,7 +338,7 @@ select employee_income("Yarden",'03','2022');
 SELECT product_name, amount from product;
 
 -- 2 ----------------------------------------------------------------------------------------------- 
-SELECT s.order_id, s.customer_id, s.member_id, s.delivery, p.price, s.order_date, p.product_name, o.product_amount FROM store_order s
+SELECT s.order_id, s.customer_id, s.member_id, s.delivery, s.order_date, p.product_name, o.product_amount, (p.price * o.product_amount) AS product_total_price, s.price AS order_price FROM store_order s
 	LEFT JOIN order_products o 
 	ON
 		s.order_id = o.order_id
@@ -374,17 +375,6 @@ SELECT c.member_id ,p.p_name, sum(s.price) AS total_price FROM person p
 		o.order_id = s.order_id
 	GROUP BY p.p_name
 	ORDER BY total_price DESC LIMIT 1; 
-    
-    SELECT * FROM person p
-	INNER JOIN crew c 
-    ON
-		c.person_id = p.person_id
-	INNER JOIN store_order s
-    ON
-		s.member_id = c.member_id
-	LEFT JOIN order_products o
-    ON 
-		o.order_id = s.order_id;  
     
 -- 5  -----------------------------------------------------------------------------------------------
 SELECT c.customer_id, p.p_name, s.order_id, pr.product_name,pr.price FROM person p	
